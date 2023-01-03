@@ -1,0 +1,12 @@
+@import url("https://www.oxvs.net/shared/out/css/style.css");
+
+/* sticky nav */
+
+nav {
+	position: fixed;
+	background: var(--bg-surface);
+}
+
+main {
+	padding: 6rem 1rem;
+}

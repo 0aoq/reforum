@@ -1,0 +1,211 @@
+[
+	{
+		"id": "_pb_users_auth_",
+		"name": "users",
+		"type": "auth",
+		"system": false,
+		"schema": [
+			{
+				"id": "users_avatar",
+				"name": "avatar",
+				"type": "file",
+				"system": false,
+				"required": false,
+				"unique": false,
+				"options": {
+					"maxSelect": 1,
+					"maxSize": 5242880,
+					"mimeTypes": ["image/jpg", "image/jpeg", "image/png", "image/svg+xml", "image/gif"],
+					"thumbs": null
+				}
+			},
+			{
+				"id": "9g5hbnfq",
+				"name": "rank",
+				"type": "text",
+				"system": false,
+				"required": false,
+				"unique": false,
+				"options": {
+					"min": null,
+					"max": null,
+					"pattern": ""
+				}
+			}
+		],
+		"listRule": "id = @request.auth.id",
+		"viewRule": "id = @request.auth.id",
+		"createRule": "",
+		"updateRule": "id = @request.auth.id",
+		"deleteRule": "id = @request.auth.id",
+		"options": {
+			"allowEmailAuth": true,
+			"allowOAuth2Auth": true,
+			"allowUsernameAuth": true,
+			"exceptEmailDomains": null,
+			"manageRule": null,
+			"minPasswordLength": 8,
+			"onlyEmailDomains": null,
+			"requireEmail": false
+		}
+	},
+	{
+		"id": "a35iw3ytoolz38c",
+		"name": "topics",
+		"type": "base",
+		"system": false,
+		"schema": [
+			{
+				"id": "c389tffj",
+				"name": "name",
+				"type": "text",
+				"system": false,
+				"required": true,
+				"unique": true,
+				"options": {
+					"min": 4,
+					"max": 64,
+					"pattern": "^\\w+$"
+				}
+			},
+			{
+				"id": "4yrjf8dn",
+				"name": "creator",
+				"type": "relation",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"maxSelect": 1,
+					"collectionId": "_pb_users_auth_",
+					"cascadeDelete": false
+				}
+			}
+		],
+		"listRule": "",
+		"viewRule": "",
+		"createRule": "@request.auth.id != null",
+		"updateRule": "@request.auth.id = creator.id",
+		"deleteRule": "@request.auth.id = creator.id",
+		"options": {}
+	},
+	{
+		"id": "ybkwut23b7xxvvt",
+		"name": "posts",
+		"type": "base",
+		"system": false,
+		"schema": [
+			{
+				"id": "dmib5fjz",
+				"name": "title",
+				"type": "text",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"min": 1,
+					"max": 64,
+					"pattern": "^\\w+$"
+				}
+			},
+			{
+				"id": "meiui1oz",
+				"name": "content",
+				"type": "text",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"min": 1,
+					"max": 500,
+					"pattern": ""
+				}
+			},
+			{
+				"id": "85gtqxcm",
+				"name": "sender",
+				"type": "relation",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"maxSelect": 1,
+					"collectionId": "_pb_users_auth_",
+					"cascadeDelete": false
+				}
+			},
+			{
+				"id": "gqvyqjb6",
+				"name": "topic",
+				"type": "relation",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"maxSelect": 1,
+					"collectionId": "a35iw3ytoolz38c",
+					"cascadeDelete": true
+				}
+			}
+		],
+		"listRule": "",
+		"viewRule": "",
+		"createRule": "@request.auth.id != null",
+		"updateRule": "@request.auth.id = sender.id",
+		"deleteRule": "@request.auth.id = sender.id || @request.auth.id = topic.creator.id",
+		"options": {}
+	},
+	{
+		"id": "xi0ca74hqe26nc0",
+		"name": "replies",
+		"type": "base",
+		"system": false,
+		"schema": [
+			{
+				"id": "s83qiol8",
+				"name": "content",
+				"type": "text",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"min": 1,
+					"max": 250,
+					"pattern": ""
+				}
+			},
+			{
+				"id": "aethcnzq",
+				"name": "post",
+				"type": "relation",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"maxSelect": 1,
+					"collectionId": "ybkwut23b7xxvvt",
+					"cascadeDelete": true
+				}
+			},
+			{
+				"id": "z0gc5h2e",
+				"name": "sender",
+				"type": "relation",
+				"system": false,
+				"required": true,
+				"unique": false,
+				"options": {
+					"maxSelect": 1,
+					"collectionId": "_pb_users_auth_",
+					"cascadeDelete": false
+				}
+			}
+		],
+		"listRule": "",
+		"viewRule": "",
+		"createRule": "@request.auth.id != null",
+		"updateRule": "@request.auth.id = sender.id",
+		"deleteRule": "@request.auth.id = sender.id || @request.auth.id = post.sender.id || @request.auth.id = post.topic.creator.id",
+		"options": {}
+	}
+]
