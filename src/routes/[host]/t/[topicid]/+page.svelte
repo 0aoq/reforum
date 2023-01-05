@@ -47,7 +47,7 @@
 		try {
 			// create post
 			const record = await pb.collection("posts").create({
-				title: event.target.name.value,
+				title: event.target.post_name_reforum.value.trim().replaceAll(" ", "_"),
 				content: document.getElementById("thread-content")!.innerText.trim(),
 				sender: pb.authStore.model.id,
 				topic: topicid
@@ -59,7 +59,9 @@
 			alert(
 				"Failed to create post! Make sure the title passes the check below:" +
 					`\n\nregex check: [^\\w+$], ${
-						event.target.name.value.match(/^\w+$/) === null ? "FAILED - Try to use underscores for spaces!" : "PASSED"
+						event.target.name.value.match(/^\w+$/) === null
+							? "FAILED - Try to use special characters!"
+							: "PASSED"
 					}`
 			);
 
@@ -80,10 +82,10 @@
 			<a
 				href="/{host}"
 				class="grid place-center"
-				aria-label="Viewing Post: {(topic || { name: '' }).name}"
+				aria-label="Viewing Topic: {(topic || { name: '' }).name.replaceAll('_', ' ')}"
 				title="Click to return to topics view"
 			>
-				{(topic || { name: "" }).name}
+				{(topic || { name: "" }).name.replaceAll("_", " ")}
 			</a>
 		</div>
 
@@ -101,7 +103,7 @@
 		<section>
 			{#if !doCreateNewPost}
 				<!-- main view -->
-				<h1 style="text-align: center;">{(topic || { name: "" }).name}</h1>
+				<h1 style="text-align: center;">{(topic || { name: "" }).name.replaceAll("_", " ")}</h1>
 
 				{#if pb.authStore.model}
 					<div class="flex mb-4" style="width: 100%; place-content: flex-end;">
@@ -133,7 +135,7 @@
 					style="gap: var(--u-2); flex-direction: column;"
 				>
 					<p class="form-label">Post Name</p>
-					<input type="text" placeholder="Post Name" name="name" />
+					<input type="text" placeholder="Post Name" name="post_name_reforum" />
 
 					<p class="form-label">Post Content</p>
 					<p
