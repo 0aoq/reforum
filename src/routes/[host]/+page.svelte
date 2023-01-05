@@ -15,7 +15,7 @@
 
 	onMount(async () => {
 		if (window.location.protocol === "https:") pb = new PocketBase(`https://${host}`);
-		if (!pb.authStore.model) return;
+		// if (!pb.authStore.model) return;
 
 		// fetch topics
 		const topics = await pb.collection("topics").getList(1, 50, {
@@ -43,7 +43,7 @@
 		<div class="file-browser">
 			{#each allTopics as topic}
 				<div class="listing">
-					<a href="/{host}/t/{topic.id}">{topic.name.replaceAll("-", " ")}</a>
+					<a href="/{host}/t/{topic.id}">{topic.name.replaceAll("_", " ")}</a>
 				</div>
 			{:else}
 				<p>No topics...</p>

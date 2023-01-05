@@ -17,11 +17,13 @@
 
 	onMount(async () => {
 		if (window.location.protocol === "https:") pb = new PocketBase(`https://${host}`);
-		if (!pb.authStore.model) return;
+		// if (!pb.authStore.model) return;
 
 		// fetch topic
 		const _topic = await pb.collection("topics").getOne(topicid);
 		topic = _topic;
+
+		document.title = `"${_topic.name}" posts on Reforum`;
 
 		// fetch posts
 		const posts = await pb.collection("posts").getList(1, 50, {
@@ -67,7 +69,7 @@
 			<div class="file-browser">
 				{#each allPosts as post}
 					<div class="listing">
-						<a href="/{host}/t/{topic.id}/{post.id}">{post.title.replaceAll("-", " ")}</a>
+						<a href="/{host}/t/{topic.id}/{post.id}">{post.title.replaceAll("_", " ")}</a>
 					</div>
 				{:else}
 					<p>No posts in topic!</p>

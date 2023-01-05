@@ -5,6 +5,7 @@
 nav {
 	position: fixed;
 	background: var(--bg-surface);
+	z-index: 100;
 }
 
 main {
