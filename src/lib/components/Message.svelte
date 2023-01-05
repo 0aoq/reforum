@@ -12,6 +12,8 @@
 	export let topic: Record;
 	export let thread: Record; // this is actually just a post! original post of the thread...
 
+	export let type: "THREAD" | "REPLY"; // thread: main post, reply: reply to main post
+
 	let protocol = "http:";
 	let sender: any = { username: "", id: "", avatar: "" };
 
@@ -29,9 +31,30 @@
 		topicOwner = topic.creator === pb.authStore.model.id;
 		threadOwner = thread.sender === pb.authStore.model.id;
 	});
+
+	// functions
+	let component: HTMLElement;
+
+	/**
+	 * @function deleteThisMessage
+	 * @description Delete the current message
+	 */
+	async function deleteThisMessage() {
+		// run confirmation
+		if (!confirm("Are you sure you want to do this?")) return;
+
+		// delete
+		try {
+			await pb.collection(type === "THREAD" ? "posts" : "replies").delete(record.id);
+			if (type === "THREAD") window.location.href = `/${host}`;
+			else component.remove(); // remove component
+		} catch {
+			alert(`Failed to delete record with type: ${type}, id: ${record.id}`);
+		}
+	}
 </script>
 
-<component>
+<component bind:this={component}>
 	<section class="flex" style="gap: var(--u-4);">
 		<!-- mod actions -->
 		{#if postOwner || topicOwner || threadOwner}
@@ -53,7 +76,8 @@
 
 					{postOwner === true ? "User" : "Mod"} Actions
 					<sup
-						style="text-decoration: underline; font-size: x-small;"
+						style="text-decoration: underline; font-size: xx-small;"
+						class="ml-2"
 						title={(postOwner === true
 							? "You can see this menu because you are the original sender of this post."
 							: "You can see this menu because you are the original owner of either the" +
@@ -64,7 +88,7 @@
 				</p>
 
 				<div class="flex mt-2" style="gap: var(--u-2);">
-					<button>Delete Content</button>
+					<button on:click={deleteThisMessage}>Delete Content</button>
 				</div>
 			</section>
 		{/if}

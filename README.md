@@ -20,10 +20,14 @@ Required PocketBase schema can be found in `./pocketbase/pb_schema.json`
 
 ## Repository Structure
 
-- Connection management page: `./routes/+page.svelte`
-- Server: `./routes/[host]/`
-    - Server auth: `./routes/[host]/auth`
-    - Server topic view: `./routes/[host]/+page.svelte`
-        - Server topic posts view: `./routes/[host]/t/[topicid]/+page.svelte`
-            - Topic post view: `./routes/[host]/t/[topicid]/[postid]/+page.svelte`
-    - User profile  view: `./routes/[host]/u/[username]/+page.svelte`
+- Connection management page: `./src/routes/+page.svelte`
+- Client Server Connection: `./src/routes/[host]/`
+    - Server auth: `./src/routes/[host]/auth`
+    - Server topic view: `./src/routes/[host]/+page.svelte`
+        - Server topic posts view: `./src/routes/[host]/t/[topicid]/+page.svelte`
+            - Topic post view: `./src/routes/[host]/t/[topicid]/[postid]/+page.svelte`
+    - User profile  view: `./src/routes/[host]/u/[username]/+page.svelte`
+- Reusable components: `./src/routes/lib/components`
+    - Site foorter: `./src/routes/lib/components/Footer.svelte`
+    - Message (posts, replies, etc): `./src/routes/lib/components/Message.svelte`
+        - _Note_: Also handles all functionality (message deletion, message permissions)

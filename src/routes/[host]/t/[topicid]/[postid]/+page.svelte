@@ -21,25 +21,29 @@
 		if (window.location.protocol === "https:") pb = new PocketBase(`https://${host}`);
 		// if (!pb.authStore.model) return;
 
-		// fetch topic
-		const _topic = await pb.collection("topics").getOne(topicid);
-		topic = _topic;
+		try {
+			// fetch topic
+			const _topic = await pb.collection("topics").getOne(topicid);
+			topic = _topic;
 
-		// fetch post
-		post = await pb.collection("posts").getOne(postid, {
-			expand: "sender"
-		});
+			// fetch post
+			post = await pb.collection("posts").getOne(postid, {
+				expand: "sender"
+			});
 
-		document.title = `"${post.title}" - Reforum`;
+			document.title = `"${post.title}" - Reforum`;
 
-		// fetch replies
-		const posts = await pb.collection("replies").getList(1, 50, {
-			sort: "created",
-			filter: `post = "${postid}"`,
-			expand: "sender"
-		});
+			// fetch replies
+			const posts = await pb.collection("replies").getList(1, 50, {
+				sort: "created",
+				filter: `post = "${postid}"`,
+				expand: "sender"
+			});
 
-		allPosts = posts.items;
+			allPosts = posts.items;
+		} catch {
+			window.location.href = `/${host}`;
+		}
 	});
 
 	/**
@@ -52,7 +56,7 @@
 		try {
 			// create record
 			const record = await pb.collection("replies").create({
-				content: document.getElementById("reply-content")!.innerText,
+				content: document.getElementById("reply-content")!.innerText.trim(),
 				post: postid,
 				sender: pb.authStore.model.id
 			});
@@ -61,6 +65,9 @@
 
 			// render to page
 			allPosts = [...allPosts, record];
+
+			// clear reply-content box
+			document.getElementById("reply-content")!.innerHTML = "";
 		} catch {
 			alert("Failed to create reply to thread!");
 		}
@@ -100,14 +107,30 @@
 
 			<!-- main post -->
 			{#if post}
-				<Message record={post} {host} {pb} ownerid={post.sender} {topic} thread={post} />
+				<Message
+					record={post}
+					{host}
+					{pb}
+					ownerid={post.sender}
+					{topic}
+					thread={post}
+					type="THREAD"
+				/>
 			{/if}
 
 			<!-- replies -->
 			<section class="mt-2 flex" style="flex-direction: column; gap: var(--u-2);">
 				<h2>Replies</h2>
 				{#each allPosts as $post}
-					<Message record={$post} {host} {pb} ownerid={$post.sender} {topic} thread={post} />
+					<Message
+						record={$post}
+						{host}
+						{pb}
+						ownerid={$post.sender}
+						{topic}
+						thread={post}
+						type="REPLY"
+					/>
 				{:else}
 					<p>No replies...</p>
 				{/each}
