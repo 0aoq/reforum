@@ -42,6 +42,7 @@
 			});
 
 			window.location.href = `/${host}/t/${newTopic.id}`;
+			doCreateNewTopic = false;
 		} catch (err) {
 			alert(
 				"Failed to create topic! Make sure the title passes the check below:" +

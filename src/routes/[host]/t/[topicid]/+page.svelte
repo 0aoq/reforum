@@ -55,6 +55,7 @@
 
 			// reload
 			window.location.href = `/${host}/t/${topicid}/${record.id}`;
+			doCreateNewPost = false;
 		} catch (err) {
 			alert(
 				"Failed to create post! Make sure the title passes the check below:" +

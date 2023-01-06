@@ -1,4 +1,6 @@
 <script lang="ts">
+	import config from "$lib/config";
+	
 	import type PocketBase from "pocketbase";
 	import type { Record } from "pocketbase";
 	import { onMount } from "svelte";
@@ -95,15 +97,19 @@
 
 		<!-- actual body -->
 		<div>
-			<img
-				src="{protocol}//{host}/api/files/_pb_users_auth_/{sender.id}/{sender.avatar}?thumb=180x180"
-				alt="{sender.username}&apos;s avatar"
-				title="{sender.username}&apos;s avatar"
-				class="pfp"
-			/>
+			{#if sender.avatar}
+				<img
+					src="{protocol}//{host}/api/files/_pb_users_auth_/{sender.id}/{sender.avatar}?thumb=180x180"
+					alt="{sender.username}&apos;s avatar"
+					title="{sender.username}&apos;s avatar"
+					class="pfp"
+				/>
+			{/if}
+
+			<h4>{sender.username}</h4>
 
 			<section class="mt-2 flex justify-center align-center">
-				<span class="chip">{sender.rank}</span>
+				<span class="chip">{sender.rank || config.defaults.rank}</span>
 			</section>
 		</div>
 
