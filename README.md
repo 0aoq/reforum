@@ -1,6 +1,6 @@
 # reforum
 
-Open-source forum app build on [PocketBase](https://pocketbase.io)
+Open-source forum app built on [PocketBase](https://pocketbase.io)
 
 Required PocketBase schema can be found in `./pocketbase/pb_schema.json`
 
